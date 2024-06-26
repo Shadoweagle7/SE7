@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,18 +9,88 @@ namespace SE7.Utility.Extensions.Linq
 {
     public static class OptionLinqExtensions
     {
-        public static Option<IEnumerable<Option<T>>> ToOptionEnumerable<T>(this IEnumerable<T> source) =>
-            source.Select(t => t.ToOption()).ToOption();
-
-        public static Option<IEnumerable<Option<T>>> ToOptionEnumerable<T>(this Option<IEnumerable<T>> source) =>
-            source.Match(e => e.Select(t => t.ToOption()), () => Option.None);
-
-        public static Option<IEnumerable<Option<T>>> ToOptionEnumerable<T>(this IEnumerable<Option<T>> source) =>
-            source.ToOption();
-
-        public static Option<T> FirstOrNone<T>(this Option<IEnumerable<Option<T>>> source)
+        public static IEnumerable<Option<TResult>> Cast<TResult>(this IEnumerable source, bool throwOnInvalidCast = true)
         {
-            return source.Match(e => e.FirstOrDefault(), () => Option.None).Unwrap();
+            foreach (var item in source)
+            {
+                if (item != null)
+                {
+                    var result = item.ToOption().As<TResult>();
+
+                    if (!result.HasValue && throwOnInvalidCast)
+                    {
+                        var fromType = item.GetType();
+                        var toType = typeof(TResult);
+                        var fromTypeName = fromType.FullName ?? fromType.Name;
+                        var toTypeName = toType.FullName ?? toType.Name;
+
+                        throw new InvalidCastException($"Failed to cast from type {fromTypeName} to {toTypeName}.");
+                    }
+
+                    yield return result;
+                }
+
+                yield return Option.None;
+            }
+        }
+
+        public static IEnumerable<Option<TResult>> DefaultIfNone<TResult>(this IEnumerable<TResult> source)
+        {
+            return source.DefaultIfEmpty().Select(x => x.ToOption());
+        }
+
+        public static IEnumerable<Option<TResult>> DefaultIfNone<TResult>(this IEnumerable<TResult> source, TResult defaultValue)
+        {
+            return source.DefaultIfEmpty(defaultValue).Select(x => x.ToOption());
+        }
+
+        public static Option<TSource> ElementAtOrNone<TSource>(this IEnumerable<TSource> source, Index index)
+        {
+            return source.ElementAtOrDefault(index);
+        }
+
+        public static Option<TSource> FirstOrNone<TSource>(this IEnumerable<TSource> source)
+        {
+            return source.FirstOrDefault();
+        }
+
+        public static Option<TSource> FirstOrNone<TSource>(
+            this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate
+        )
+        {
+            return source.FirstOrDefault(predicate);
+        }
+
+        public static Option<TSource> LastOrNone<TSource>(this IEnumerable<TSource> source)
+        {
+            return source.LastOrDefault();
+        }
+
+        public static Option<TSource> LastOrNone<TSource>(
+            this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate
+        )
+        {
+            return source.LastOrDefault(predicate);
+        }
+
+        public static IEnumerable<Option<TResult>> OfType<TResult>(this IEnumerable source)
+        {
+            return source.OfType<TResult>();
+        }
+
+        public static Option<TSource> SingleOrNone<TSource>(this IEnumerable<TSource> source)
+        {
+            return source.SingleOrDefault();
+        }
+
+        public static Option<TSource> SingleOrNone<TSource>(
+            this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate
+        )
+        {
+            return source.SingleOrDefault(predicate);
         }
     }
 }

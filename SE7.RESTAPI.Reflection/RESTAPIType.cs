@@ -19,12 +19,13 @@ namespace SE7.RESTAPI.Reflection
         private readonly IEnumerable<RESTAPIMethodInfo> RESTMethodInfos;
 
         public override Assembly Assembly => RESTAPIAssembly;
-        public override string? AssemblyQualifiedName => throw new NotImplementedException();
+
+        // E.g. "System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"
+        public override string? AssemblyQualifiedName => $"{}";
         public override Type? BaseType { get; }
         public override string? FullName => throw new NotImplementedException();
         public override Guid GUID => throw new NotImplementedException();
         public override Module Module => throw new NotImplementedException();
-        public override string? Namespace => throw new NotImplementedException();
         public override Type UnderlyingSystemType => throw new NotImplementedException();
         public override string Name => RESTAPITypeName;
 

@@ -1,4 +1,6 @@
-﻿namespace SE7.Utility
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SE7.Utility
 {
     public readonly struct EmptyOption;
 
@@ -25,6 +27,9 @@
         private object? RawValue;
         internal readonly T? Value => (T?)RawValue;
 
+        [MemberNotNullWhen(true, nameof(RawValue), nameof(Value))]
+        public readonly bool HasValue => RawValue != null;
+
         public Option() => RawValue = null;
         public Option(T? value) => RawValue = value;
         public Option(EmptyOption _) => RawValue = null;
@@ -40,7 +45,7 @@
 
         public readonly Option<TResult> Select<TResult>(Func<T, TResult> selector)
         {
-            if (RawValue != null)
+            if (HasValue)
             {
                 return new Option<TResult>(selector((T)RawValue));
             }
@@ -50,7 +55,7 @@
 
         public readonly Option<TResult> Match<TResult>(Func<T, TResult> onValuePresent, Func<TResult> onEmpty)
         {
-            if (RawValue != null)
+            if (HasValue)
             {
                 return new Option<TResult>(onValuePresent((T)RawValue));
             }
@@ -60,7 +65,7 @@
 
         public readonly Option<TResult> Match<TResult>(Func<T, EmptyOption> onValuePresent, Func<TResult> onEmpty)
         {
-            if (RawValue != null)
+            if (HasValue)
             {
                 return new Option<TResult>(onValuePresent((T)RawValue));
             }
@@ -70,7 +75,7 @@
 
         public readonly Option<TResult> Match<TResult>(Func<T, TResult> onValuePresent, Func<EmptyOption> onEmpty)
         {
-            if (RawValue != null)
+            if (HasValue)
             {
                 return new Option<TResult>(onValuePresent((T)RawValue));
             }
@@ -102,7 +107,7 @@
 
         public readonly Option<TResult> As<TResult>()
         {
-            if (RawValue == null)
+            if (!HasValue)
             {
                 return Option.None;
             }
@@ -112,12 +117,12 @@
 
         public readonly bool Equals(Option<T> other)
         {
-            if (RawValue == null && other.RawValue == null)
+            if (!HasValue && !other.HasValue)
             {
                 return true;
             }
 
-            if ((RawValue == null && other.RawValue != null) || (RawValue != null && other.RawValue == null))
+            if ((!HasValue && other.HasValue) || (HasValue && !other.HasValue))
             {
                 return false;
             }

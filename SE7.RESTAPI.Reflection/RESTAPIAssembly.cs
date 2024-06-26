@@ -12,7 +12,26 @@ namespace SE7.RESTAPI.Reflection
 {
     public class RESTAPIAssembly : Assembly
     {
-        public override object? CreateInstance(string typeName, bool ignoreCase, BindingFlags bindingAttr, Binder? binder, object[]? args, CultureInfo? culture, object[]? activationAttributes)
+        /// <summary>
+        /// Creates an instance of an <see cref="RESTAPIType"/>, representing a collection of endpoints.
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="bindingAttr"></param>
+        /// <param name="binder"></param>
+        /// <param name="args"></param>
+        /// <param name="culture"></param>
+        /// <param name="activationAttributes"></param>
+        /// <returns></returns>
+        public override RESTAPIType? CreateInstance(
+            string typeName,
+            bool ignoreCase,
+            BindingFlags bindingAttr,
+            Binder? binder,
+            object[]? args,
+            CultureInfo? culture,
+            object[]? activationAttributes
+        )
         {
 
         }
