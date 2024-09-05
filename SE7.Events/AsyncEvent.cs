@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SE7.Events
+﻿namespace SE7.Events
 {
-    public class AsyncEvent : IEvent<Func<EventArgs, Task>>
+    public abstract class AsyncEvent : IEvent<Func<EventArgs, Task>, AsyncEvent>
     {
         private readonly List<Func<EventArgs, Task>> Callbacks = [];
 
@@ -33,5 +27,19 @@ namespace SE7.Events
         }
 
         public void RemoveCallback(Func<EventArgs, Task> @delegate) => Callbacks.Remove(@delegate);
+
+        public static AsyncEvent operator +(AsyncEvent @event, Func<EventArgs, Task> @delegate)
+        {
+            @event.AddCallback(@delegate);
+
+            return @event;
+        }
+
+        public static AsyncEvent operator -(AsyncEvent @event, Func<EventArgs, Task> @delegate)
+        {
+            @event.RemoveCallback(@delegate);
+
+            return @event;
+        }
     }
 }
