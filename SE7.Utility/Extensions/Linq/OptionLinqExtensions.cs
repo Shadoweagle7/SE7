@@ -13,24 +13,27 @@ namespace SE7.Utility.Extensions.Linq
         {
             foreach (var item in source)
             {
-                if (item != null)
-                {
-                    var result = item.ToOption().As<TResult>();
+                yield return item
+                    .ToOption()
+                    .As<TResult>()
+                    .Match(
+                        onValuePresent: v => v,
+                        onEmpty: () =>
+                        {
+                            if (throwOnInvalidCast)
+                            {
+                                var fromType = item.GetType();
+                                var toType = typeof(TResult);
+                                var fromTypeName = fromType.FullName ?? fromType.Name;
+                                var toTypeName = toType.FullName ?? toType.Name;
 
-                    if (!result.HasValue && throwOnInvalidCast)
-                    {
-                        var fromType = item.GetType();
-                        var toType = typeof(TResult);
-                        var fromTypeName = fromType.FullName ?? fromType.Name;
-                        var toTypeName = toType.FullName ?? toType.Name;
+                                throw new InvalidCastException($"Failed to cast from type {fromTypeName} to {toTypeName}.");
+                            }
 
-                        throw new InvalidCastException($"Failed to cast from type {fromTypeName} to {toTypeName}.");
-                    }
-
-                    yield return result;
-                }
-
-                yield return Option.None;
+                            return Option.None;
+                        }
+                    )
+                ;
             }
         }
 

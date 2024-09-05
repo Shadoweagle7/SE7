@@ -6,13 +6,23 @@ using System.Threading.Tasks;
 
 namespace SE7.Sql
 {
-    public abstract class StoredProcedureBuilderWithCommand
+    public class StoredProcedureBuilderWithCommand : StoredProcedure
     {
+        public StoredProcedureBuilderWithCommand(
+            string connectionString,
+            Type dataTransferObjectType
+        ) : base(connectionString, dataTransferObjectType) {}
 
-    }
-
-    public class StoredProcedureBuilderWithGetCommand : StoredProcedureBuilderWithCommand
-    {
-
+        public StoredProcedureBuilderWithCommandAndOneOrMoreSelectors By<TStoredProcedureSelector>(
+            TStoredProcedureSelector storedProcedureSelector
+        )
+            where TStoredProcedureSelector : StoredProcedureSelector
+        {
+            return new StoredProcedureBuilderWithCommandAndOneOrMoreSelectors(
+                ConnectionString,
+                DataTransferObjectType,
+                storedProcedureSelector
+            );
+        }
     }
 }

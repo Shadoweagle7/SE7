@@ -24,10 +24,13 @@ namespace SE7.RESTAPI.Reflection
         public override string? AssemblyQualifiedName => $"{}";
         public override Type? BaseType { get; }
         public override string? FullName => throw new NotImplementedException();
+        // https://stackoverflow.com/questions/8360317/what-is-type-guid-and-how-does-it-relate-to-type-equals
+        // Basically, GUID exists because COM can and does use it.
         public override Guid GUID => throw new NotImplementedException();
         public override Module Module => throw new NotImplementedException();
         public override Type UnderlyingSystemType => throw new NotImplementedException();
         public override string Name => RESTAPITypeName;
+        public override string? Namespace => throw new NotImplementedException();
 
         internal RESTAPIType(
             RESTAPIAssembly restAPIAssembly,
@@ -42,11 +45,6 @@ namespace SE7.RESTAPI.Reflection
             RESTAPITypeName = restAPITypeName;
             RESTAPIConstructors = constructors;
             RESTMethodInfos = restAPIMethodInfos;
-        }
-
-        public static RESTAPIType Of(???)
-        {
-
         }
 
         public override ConstructorInfo[] GetConstructors(BindingFlags bindingAttr)

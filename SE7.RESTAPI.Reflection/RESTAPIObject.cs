@@ -8,9 +8,24 @@ namespace SE7.RESTAPI.Reflection
 {
     public class RESTAPIObject
     {
-        public new Type GetType()
+        public new RESTAPIType GetType()
         {
-            return RESTAPIType.Of();
+
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }

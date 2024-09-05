@@ -4,6 +4,6 @@
     {
         Option<TResult> As<TResult>();
         bool Is<TOther>();
-        bool Is<TOther>(out TOther? other);
+        bool Is<TOther>(out Option<TOther> other);
     }
 }

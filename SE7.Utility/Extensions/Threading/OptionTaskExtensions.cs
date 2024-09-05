@@ -17,7 +17,7 @@ namespace SE7.Utility.Extensions.Threading
 
     public readonly struct OptionTask
     {
-        public EmptyOptionTask None { get; }
+        public static EmptyOptionTask None { get; }
     }
 
     public static class OptionTaskExtensions
@@ -37,7 +37,14 @@ namespace SE7.Utility.Extensions.Threading
             Func<T, Task<TResult>> selector
         )
         {
-            return await taskOfOptionOfT.ContinueWith(t => t.Result.SelectAsync(selector)).Unwrap();
+            var optionOfT = await taskOfOptionOfT;
+
+            if (optionOfT.HasValue)
+            {
+                return await selector(optionOfT.Value);
+            }
+
+            return Option.None;
         }
 
         public static async Task<Option<TResult>> MatchAsync<T, TResult>(
@@ -79,6 +86,60 @@ namespace SE7.Utility.Extensions.Threading
             if (option.HasValue)
             {
                 return new Option<TResult>(await onValuePresentAsync(option.Value));
+            }
+
+            await onEmptyAsync();
+
+            return new Option<TResult>();
+        }
+
+        //
+
+        public static async Task<Option<TResult>> MatchAsync<T, TResult>(
+            this Task<Option<T>> taskOfOptionOfT,
+            Func<T, Task<TResult>> onValuePresentAsync,
+            Func<Task<TResult>> onEmptyAsync
+        )
+        {
+            var optionOfT = await taskOfOptionOfT;
+
+            if (optionOfT.HasValue)
+            {
+                return new Option<TResult>(await onValuePresentAsync(optionOfT.Value));
+            }
+
+            return new Option<TResult>(await onEmptyAsync());
+        }
+
+        public static async Task<Option<TResult>> MatchAsync<T, TResult>(
+            this Task<Option<T>> taskOfOptionOfT,
+            Func<T, EmptyOptionTask> onValuePresentAsync,
+            Func<Task<TResult>> onEmptyAsync
+        )
+        {
+            var optionOfT = await taskOfOptionOfT;
+
+            if (optionOfT.HasValue)
+            {
+                await onValuePresentAsync(optionOfT.Value);
+
+                return new Option<TResult>();
+            }
+
+            return new Option<TResult>(await onEmptyAsync());
+        }
+
+        public static async Task<Option<TResult>> MatchAsync<T, TResult>(
+            this Task<Option<T>> taskOfOptionOfT,
+            Func<T, Task<TResult>> onValuePresentAsync,
+            Func<EmptyOptionTask> onEmptyAsync
+        )
+        {
+            var optionOfT = await taskOfOptionOfT;
+
+            if (optionOfT.HasValue)
+            {
+                return new Option<TResult>(await onValuePresentAsync(optionOfT.Value));
             }
 
             await onEmptyAsync();
