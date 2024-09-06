@@ -1,6 +1,6 @@
 ﻿namespace SE7.Events
 {
-    public abstract class EventsService
+    public sealed class EventsService
     {
         private readonly Dictionary<Type, IEvent> Events = [];
 
