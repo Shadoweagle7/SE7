@@ -8,14 +8,7 @@
 
         public async Task RaiseParallelAsync(EventArgs eventArgs)
         {
-            var callbackTasks = new List<Task>();
-
-            foreach (var callback in Callbacks)
-            {
-                callbackTasks.Add(callback(eventArgs));
-            }
-            
-            await Task.WhenAll(callbackTasks);
+            await Task.WhenAll(Callbacks.Select(c => c(eventArgs)));
         }
 
         public async Task RaiseSequentiallyAsync(EventArgs eventArgs)
