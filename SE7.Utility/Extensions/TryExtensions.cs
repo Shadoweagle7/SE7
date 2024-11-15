@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SE7.Utility.Try;
 
-namespace SE7.Utility.Try
+namespace SE7.Utility.Extensions
 {
     public static class TryExtensions
     {
         public static TryResult Try(this TryAction tryAction)
         {
-			try
-			{
-				tryAction();
+            try
+            {
+                tryAction();
 
-				return TryResult.Success;
-			}
-			catch (Exception e)
-			{
+                return TryResult.Success;
+            }
+            catch (Exception e)
+            {
                 return e;
-			}
+            }
         }
 
         public static TryResult Try(this TryActionWithArgs tryActionWithArgs, TryArgs tryArgs)
@@ -37,7 +33,7 @@ namespace SE7.Utility.Try
         }
 
         public static TryResult<T> Try<T>(this TryFunc<T> tryFunc)
-		{
+        {
             try
             {
                 return tryFunc();

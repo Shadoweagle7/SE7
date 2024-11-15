@@ -12,7 +12,7 @@ namespace SE7.UnitTests.RESTAPI.Reflection
         [Test(Author = "SE7", Description = "Assert That RESTAPIType Is Implemented Correctly", TestOf = typeof(RESTAPIType))]
         public void AssertThatRESTAPITypeIsImplementedCorrectly()
         {
-            var restAPIType = 
+            var restAPIType =
         }
     }
 }

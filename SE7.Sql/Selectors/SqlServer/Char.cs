@@ -34,7 +34,7 @@
             {
                 throw new InvalidOperationException($"Input string exceeds set length {N}.");
             }
-            
+
             return value;
         }
     }

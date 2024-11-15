@@ -1,5 +1,4 @@
-﻿using SE7.Utility.Extensions;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace SE7.Utility
 {
@@ -34,7 +33,7 @@ namespace SE7.Utility
 
             public static implicit operator Func<bool>(MatchFunc matchFunc) => matchFunc.Func;
         }
-        
+
         public readonly struct MatchFunc<T>
         {
             private readonly Func<T, bool> Func;
