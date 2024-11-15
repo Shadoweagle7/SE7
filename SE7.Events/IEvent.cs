@@ -21,6 +21,6 @@
         /// Removes a callback from this event.
         /// </summary>
         /// <param name="delegate">The callback to remove from this event.</param>
-        public void RemoveCallback(TDelegate @delegate);
+        public bool TryRemoveCallback(TDelegate @delegate);
     }
 }

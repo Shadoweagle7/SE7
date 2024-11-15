@@ -50,7 +50,7 @@
         {
             if (Events.TryGetValue(typeof(TEvent), out var @event) && @event is Event e)
             {
-                e.RemoveCallback(callback);
+                e.TryRemoveCallback(callback);
 
                 return true;
             }
@@ -86,7 +86,7 @@
         {
             if (Events.TryGetValue(typeof(TAsyncEvent), out var @event) && @event is AsyncEvent ae)
             {
-                ae.RemoveCallback(callback);
+                ae.TryRemoveCallback(callback);
 
                 return true;
             }

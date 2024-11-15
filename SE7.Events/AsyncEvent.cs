@@ -30,6 +30,6 @@
             }
         }
 
-        public void RemoveCallback(Func<EventArgs, Task> @delegate) => Callbacks.Remove(@delegate);
+        public bool TryRemoveCallback(Func<EventArgs, Task> @delegate) => Callbacks.Remove(@delegate);
     }
 }

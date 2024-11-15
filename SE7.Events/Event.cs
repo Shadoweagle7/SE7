@@ -21,6 +21,6 @@
             }
         }
 
-        public void RemoveCallback(Action<EventArgs> @delegate) => Callbacks.Remove(@delegate);
+        public bool TryRemoveCallback(Action<EventArgs> @delegate) => Callbacks.Remove(@delegate);
     }
 }
