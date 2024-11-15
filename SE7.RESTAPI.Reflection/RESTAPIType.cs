@@ -15,8 +15,9 @@ namespace SE7.RESTAPI.Reflection
 
         public override Assembly Assembly => RESTAPIAssembly;
 
-        // E.g. "System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e"
-        public override string? AssemblyQualifiedName => $"{}";
+        // E.g. "System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=??"
+#warning TODO
+        public override string? AssemblyQualifiedName => $"{""}";
         public override Type? BaseType { get; }
         public override string? FullName => throw new NotImplementedException();
         // https://stackoverflow.com/questions/8360317/what-is-type-guid-and-how-does-it-relate-to-type-equals

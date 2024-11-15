@@ -19,7 +19,7 @@
         /// </summary>
         /// <typeparam name="TAsyncEvent">The type of the asynchronous event.</typeparam>
         /// <returns><see langword="true"/> if the asynchronous event was successfully registered; <see langword="false"/> otherwise.</returns>
-        public bool TryRegisterAsyncEvent<TAsyncEvent>() where TAsyncEvent : Event, new() =>
+        public bool TryRegisterAsyncEvent<TAsyncEvent>() where TAsyncEvent : AsyncEvent, new() =>
             Events.TryAdd(typeof(TAsyncEvent), new TAsyncEvent());
 
         /// <summary>
