@@ -1,9 +1,11 @@
-﻿namespace SE7.Events
+﻿using SE7.Events.Services.Interfaces;
+
+namespace SE7.Events.Services.Implementations
 {
     /// <summary>
     /// A simple events service that can be injected to services such that events can easily be raised in between services.
     /// </summary>
-    public sealed class EventsService
+    internal sealed class EventsService : IEventsService
     {
         private readonly Dictionary<Type, IEvent> Events = [];
 
@@ -28,7 +30,7 @@
         /// <typeparam name="TEvent">The type of the event to subscribe <paramref name="callback"/> to.</typeparam>
         /// <param name="callback">The callback to subscribe.</param>
         /// <returns><see langword="true"/> if the callback was successfully subscribed; <see langword="false"/> otherwise.</returns>
-        public bool TrySubscribeEvent<TEvent>(Action<EventArgs> callback) where TEvent : Event, new()
+        public bool TrySubscribeToEvent<TEvent>(Action<EventArgs> callback) where TEvent : Event, new()
         {
             if (Events.TryGetValue(typeof(TEvent), out var @event) && @event is Event e)
             {
@@ -46,7 +48,7 @@
         /// <typeparam name="TEvent">The type of the event to unsubscribe <paramref name="callback"/> from.</typeparam>
         /// <param name="callback">The callback to unsubscribe.</param>
         /// <returns><see langword="true"/> if the callback was successfully unsubscribed; <see langword="false"/> otherwise.</returns>
-        public bool TryUnsubscribeEvent<TEvent>(Action<EventArgs> callback) where TEvent : Event, new()
+        public bool TryUnsubscribeFromEvent<TEvent>(Action<EventArgs> callback) where TEvent : Event, new()
         {
             if (Events.TryGetValue(typeof(TEvent), out var @event) && @event is Event e)
             {
@@ -64,7 +66,7 @@
         /// <typeparam name="TAsyncEvent">The type of the asynchronous event to subscribe <paramref name="callback"/> from.</typeparam>
         /// <param name="callback">The asynchronous callback to subscribe.</param>
         /// <returns><see langword="true"/> if the asynchronous callback was successfully subscribed; <see langword="false"/> otherwise.</returns>
-        public bool TrySubscribeAsyncEvent<TAsyncEvent>(Func<EventArgs, Task> callback) where TAsyncEvent : AsyncEvent, new()
+        public bool TrySubscribeToAsyncEvent<TAsyncEvent>(Func<EventArgs, Task> callback) where TAsyncEvent : AsyncEvent, new()
         {
             if (Events.TryGetValue(typeof(TAsyncEvent), out var @event) && @event is AsyncEvent ae)
             {
@@ -82,7 +84,7 @@
         /// <typeparam name="TAsyncEvent">The type of the asynchronous event to unsubscribe <paramref name="callback"/> from.</typeparam>
         /// <param name="callback">The asynchronous callback to unsubscribe.</param>
         /// <returns><see langword="true"/> if the asynchronous callback was successfully unsubscribed; <see langword="false"/> otherwise.</returns>
-        public bool TryUnubscribeAsyncEvent<TAsyncEvent>(Func<EventArgs, Task> callback) where TAsyncEvent : AsyncEvent, new()
+        public bool TryUnubscribeFromAsyncEvent<TAsyncEvent>(Func<EventArgs, Task> callback) where TAsyncEvent : AsyncEvent, new()
         {
             if (Events.TryGetValue(typeof(TAsyncEvent), out var @event) && @event is AsyncEvent ae)
             {

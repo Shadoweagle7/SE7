@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SE7.Events.Services.Interfaces;
+using SE7.Events.Services.Implementations;
 
 namespace SE7.Events.Extensions
 {
@@ -14,7 +16,7 @@ namespace SE7.Events.Extensions
         /// <returns><paramref name="services"/> for method chaining.</returns>
         public static IServiceCollection AddEvents(this IServiceCollection services)
         {
-            services.AddSingleton<EventsService>();
+            services.AddSingleton<IEventsService, EventsService>();
 
             return services;
         }
